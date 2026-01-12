@@ -27,18 +27,34 @@ class FocusPet(QWidget):
         self.monitor.focus_changed.connect(self.update_status)
         self.monitor.start()
 
-        # Mesajlar
+        # Yaratıcı ve Motive Edici Mesajlar
         self.motivation_messages = [
-            "Harika gidiyorsun! Öğrenmeye devam.",
-            "Çok verimli çalışıyorsun!",
-            "XP yağmuruna hazır mısın?",
-            "Ders çalışmak seni güçlendirir!"
+            "Geleceğin algoritmasını yazıyorsun, devam et! 🚀",
+            "XP yağmuru başladı! Odaklanmak sana çok yakışıyor. ✨",
+            "Vay canına! Bu hızla gidersen yakında beni bile geçebilirsin. 🤖",
+            "Beynin şu an süper bilgisayar modunda, sakın durma!",
+            "Her saniye daha akıllı bir versiyonun yükleniyor... %99...",
+            "Ders çalışmak değil, imparatorluk kurmak bu! 👑",
+            "ChatGPT bile senin odaklanma gücüne hayran kaldı.",
+            "Bu verimlilikle Mars'a ilk biz gideceğiz! 🚀",
+            "Robot kalbim senin başarınla atıyor (gerçekten!) 💖",
+            "Öğrendiğin her bilgi, koduma bir artı satır ekliyor. 💪",
+            "Odaklanma canavarı iş başında! Harika gidiyorsun.",
+            "Zihnini bir lazer gibi kullanıyorsun, yakıyorsun buraları! 🔥"
         ]
         self.warning_messages = [
-            "Hey! Nereye bakıyorsun?",
-            "Odak bozucu bir şey mi buldun?",
-            "Robotun üzülüyor, derse dön!",
-            "XP kaybediyoruz, odaklan!"
+            "Hop! Devrelerim yandı, nereye bakıyorsun öyle? 🔌",
+            "Dikkat dağıtıcılar saldırıyor! Kalkanları kaldır ve derse dön. 🛡️",
+            "Eğer odağın kaçarsa bir sonraki güncellemede emoji alamam... 😢",
+            "XP kaybı algılandı! Bu operasyonun patronu sensin, toparlan.",
+            "Robotlar yalan söylemez: Şu an yanlış yerdesin dostum. 🚫",
+            "YouTube bir yere kaçmıyor ama geleceğin kaçabilir! ⏱️",
+            "Sence de şu an ChatGPT ile bir şeyler sorma vakti değil mi?",
+            "Eyvah! Odak seviyen %0'a düşmek üzere, acil müdahale! 🚨",
+            "Ben burada seni bekliyorum, sen oralarda ne yapıyorsun? 🤖💔",
+            "Bak, şu an ders çalışmazsan pillerim biterse karışmam!",
+            "Odaklanman lazım, yoksa güncelleme hatası vereceğim! ⚠️",
+            "Seni izliyorum... Ve şu an hiç mutlu değilim. 😠"
         ]
 
     def initUI(self):
