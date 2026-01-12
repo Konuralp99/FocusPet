@@ -1,0 +1,21 @@
+# Python verileri
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+ENV/
+
+# Focus Pet özel verilerimiz
+stats.json
+assets/*.png_bak
+assets/*.gif_bak
+
+# Windows sistem dosyaları
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE ayarları
+.vscode/
+.idea/
