@@ -2,7 +2,7 @@ import sys
 import os
 import random
 import time
-from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QMenu, QProgressBar, QHBoxLayout, QFrame, QSystemTrayIcon
+from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QMenu, QProgressBar, QHBoxLayout, QFrame, QSystemTrayIcon, QStyle
 from PyQt6.QtCore import Qt, QPoint, QTimer, QSize
 from PyQt6.QtGui import QPixmap, QCursor, QAction, QMovie, QIcon
 from monitor import WindowMonitor
@@ -127,7 +127,8 @@ class FocusPet(QWidget):
         if os.path.exists(icon_path):
             self.tray_icon.setIcon(QIcon(icon_path))
         else:
-            self.tray_icon.setIcon(self.style().standardIcon(QIcon.Mode.Normal.Normal))
+            # Hatalı parametre düzeltildi: PyQt6 standart ikonu kullanılıyor
+            self.tray_icon.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_ComputerIcon))
         
         tray_menu = QMenu()
         tray_menu.addAction("📊 Dashboard", self.open_dashboard)

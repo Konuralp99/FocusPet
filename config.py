@@ -2,7 +2,7 @@ import json
 import os
 
 # Versiyon Bilgisi
-VERSION = "4.0.1 Alpha (Clean & Dynamic)"
+VERSION = "4.0.2 Alpha (Hotfix)"
 
 # Klasörler
 ASSETS_DIR = "assets"
