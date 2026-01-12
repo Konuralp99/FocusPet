@@ -1,12 +1,22 @@
 import json
 import os
+import sys
+
+def get_resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 # Versiyon Bilgisi
 VERSION = "4.0.2 Alpha (Hotfix)"
 
 # Klasörler
-ASSETS_DIR = "assets"
-STATS_FILE = "stats.json"
+ASSETS_DIR = get_resource_path("assets")
+STATS_FILE = "stats.json" # Statlar EXE ile aynı dizinde kalmalı (kalıcı olsun diye)
 
 # Pencere İzleme Ayarları
 AFK_THRESHOLD_SEC = 45 
