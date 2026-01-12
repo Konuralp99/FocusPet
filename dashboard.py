@@ -65,6 +65,15 @@ class Dashboard(QWidget):
         add_btn.setStyleSheet("background: #27ae60; font-weight: bold; padding: 5px 15px; border-radius: 4px;")
         add_hbox.addWidget(self.add_input); add_hbox.addWidget(add_btn)
         summary_layout.addLayout(add_hbox)
+        
+        # SİLME Butonu (v4.0.1 Yeni)
+        remove_btn = QPushButton("SEÇİLENİ LİSTEDEN SİL")
+        remove_btn.clicked.connect(self.remove_item)
+        remove_btn.setStyleSheet("""
+            background: #c0392b; color: white; font-weight: bold; 
+            padding: 8px; border-radius: 4px; margin-top: 5px;
+        """)
+        summary_layout.addWidget(remove_btn)
 
         # --- SEKME 2: ANALİTİK (HİSTORY) ---
         analysis_tab = QWidget()
@@ -117,11 +126,21 @@ class Dashboard(QWidget):
             self.history_list.item(self.history_list.count()-1).setForeground(Qt.GlobalColor.white if item["state"]=="focused" else Qt.GlobalColor.gray)
 
     def add_item(self):
-        text = self.add_input.text().strip()
-        if text:
+        text = self.add_input.text().strip().lower()
+        if text and text not in self.whitelist_ref:
             self.whitelist_ref.add(text)
             self.wl_list.addItem(text)
             self.add_input.clear()
+
+    def remove_item(self):
+        selected_items = self.wl_list.selectedItems()
+        if not selected_items: return
+        
+        for item in selected_items:
+            text = item.text()
+            if text in self.whitelist_ref:
+                self.whitelist_ref.remove(text)
+            self.wl_list.takeItem(self.wl_list.row(item))
 
     def closeEvent(self, event):
         event.ignore()

@@ -2,7 +2,7 @@ import json
 import os
 
 # Versiyon Bilgisi
-VERSION = "4.0.0 Alpha (AI Assistant)"
+VERSION = "4.0.1 Alpha (Clean & Dynamic)"
 
 # Klasörler
 ASSETS_DIR = "assets"
