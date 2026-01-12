@@ -63,8 +63,17 @@ class FocusPet(QWidget):
         self.xp_bar = QProgressBar(self)
         self.xp_bar.setMaximum(config.XP_PER_LEVEL)
         self.xp_bar.setFixedHeight(8)
-        self.xp_bar.setStyleSheet("QProgressBar { border: 1px solid #444; border-radius: 4px; background: #111; } QProgressBar::chunk { background: #00ff00; border-radius: 4px; }")
+        self.xp_bar.setTextVisible(False)
+        self.xp_bar.setStyleSheet("QProgressBar { border: 1px solid #333; border-radius: 4px; background: #111; } QProgressBar::chunk { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #005500, stop:1 #00ff00); border-radius: 4px; }")
         self.main_layout.addWidget(self.xp_bar)
+
+        # 1.1 Enerji Barı (v4.0 Yeni)
+        self.energy_bar = QProgressBar(self)
+        self.energy_bar.setMaximum(config.MAX_ENERGY)
+        self.energy_bar.setFixedHeight(6)
+        self.energy_bar.setTextVisible(False)
+        self.energy_bar.setStyleSheet("QProgressBar { border: 1px solid #333; border-radius: 3px; background: #111; } QProgressBar::chunk { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #8e44ad, stop:1 #e67e22); border-radius: 3px; }")
+        self.main_layout.addWidget(self.energy_bar)
 
         # 2. Orta Panel (Room) - Minimalist (Sadece Robot)
         self.room_frame = QFrame()
@@ -131,6 +140,7 @@ class FocusPet(QWidget):
         self.current_window_title = title
         self.level_badge.setText(f"LVL {stats['level']}")
         self.xp_bar.setValue(int(stats['xp'] % config.XP_PER_LEVEL))
+        self.energy_bar.setValue(int(stats.get('energy', 100)))
         
         # Eşya Açma Mantığı Kaldırıldı (Minimalist Tasarım)
 

@@ -29,17 +29,46 @@ class StatsTracker:
                 pass
         return config.get_default_stats()
 
-    def update(self, state, duration_sec): 
+    def update(self, state, duration_sec, app_name="Unknown"): 
         min_val = duration_sec / 60
+        now_str = time.strftime("%H:%M")
+        
+        # 1. Temel İstatistikler
         if state == "focused":
             self.data["focused_min"] += min_val
-            self.data["xp"] += config.XP_FOCUSED_PER_MIN * min_val 
+            self.data["xp"] += config.XP_FOCUSED_PER_MIN * min_val
+            self.data["energy"] = min(config.MAX_ENERGY, self.data["energy"] + config.ENERGY_GAIN_FOCUSED_PER_MIN * min_val)
         elif state == "distracted":
             self.data["distracted_min"] += min_val
             self.data["xp"] = max(0, self.data["xp"] - config.XP_DISTRACTED_LOSS_PER_MIN * min_val)
+            self.data["energy"] = max(0, self.data["energy"] - config.ENERGY_LOSS_DISTRACTED_PER_MIN * min_val)
         elif state == "afk":
             self.data["afk_min"] += min_val
+            self.data["energy"] = min(config.MAX_ENERGY, self.data["energy"] + config.ENERGY_GAIN_AFK_PER_MIN * min_val)
             
+        # 2. History (Geçmiş) Kaydı - Isı haritası için
+        # Eğer son kayıt aynı uygulamaysa süresini artır, değilse yeni kayıt ekle
+        if self.data["history"] and self.data["history"][-1]["app"] == app_name and self.data["history"][-1]["state"] == state:
+            self.data["history"][-1]["duration"] += min_val
+        else:
+            self.data["history"].append({
+                "app": app_name,
+                "duration": min_val,
+                "time": now_str,
+                "state": state
+            })
+            # Geçmişi son 100 kayıtta sınırla (Bellek dostu)
+            if len(self.data["history"]) > 100: self.data["history"].pop(0)
+
+        # 3. Günlük Görevler (Quests)
+        for q in self.data["daily_quests"]:
+            if not q["done"]:
+                if q["id"] == "study_1h" and state == "focused":
+                    q["progress"] += min_val
+                if q["progress"] >= q["goal"]:
+                    q["done"] = True
+                    self.data["xp"] += 50 # Görev ödülü
+
         self.data["level"] = int(self.data["xp"] // config.XP_PER_LEVEL) + 1
             
         if time.time() - self.last_save > 30:
@@ -130,12 +159,13 @@ class WindowMonitor(QThread):
 
             # 4. İstatistik Güncelleme
             focused = False
+            app_name = self.get_app_name()
             if not is_afk:
                 focused = self.is_focused(title)
                 state = "focused" if focused else "distracted"
-                self.stats.update(state, dt)
+                self.stats.update(state, dt, app_name)
             else:
-                self.stats.update("afk", dt)
+                self.stats.update("afk", dt, "Away/Idle")
             
             pomo_info = {"state": self.pomodoro_state, "timer": int(self.pomodoro_timer)}
             self.focus_changed.emit(focused, title, is_afk, self.stats.data, pomo_info, health_msg)
@@ -148,6 +178,13 @@ class WindowMonitor(QThread):
             if hwnd: return win32gui.GetWindowText(hwnd)
         except: pass
         return ""
+
+    def get_app_name(self):
+        try:
+            hwnd = win32gui.GetForegroundWindow()
+            _, pid = win32process.GetWindowThreadProcessId(hwnd)
+            return psutil.Process(pid).name()
+        except: return "System"
 
     def is_focused(self, title):
         if not title or title == "Masaüstü/Boş": return False
