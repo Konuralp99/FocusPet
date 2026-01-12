@@ -63,7 +63,8 @@ def remove_background(path):
 
 if __name__ == "__main__":
     assets_dir = "assets"
-    files = ["happy.gif", "angry.gif", "sleep.gif", "sleep.png"]
+    # Sadece GIF'leri işle (Robot animasyonları)
+    files = ["happy.gif", "angry.gif", "sleep.gif"]
     for filename in files:
         path = filename if os.path.exists(filename) else os.path.join(assets_dir, filename)
         if os.path.exists(path):
